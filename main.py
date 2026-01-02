@@ -4,7 +4,7 @@ GUI-based control panel for selecting images and launching animations
 """
 
 import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
+from tkinter import filedialog, messagebox, ttk, colorchooser
 import os
 import threading
 from ascii_converter import ASCIIConverter
@@ -21,11 +21,12 @@ class ASCIIArtGUI:
         """
         self.root = root
         self.root.title("ASCII Art Generator")
-        self.root.geometry("600x400")
+        self.root.geometry("600x500")
         self.root.resizable(False, False)
         
         # Variables
         self.selected_file = None
+        self.current_color = (255, 255, 255)  # Default white
         # Increased resolution for clarity (250 width base)
         self.converter = ASCIIConverter(target_width=250)
         
@@ -164,6 +165,29 @@ class ASCIIArtGUI:
         )
         anim_combo.grid(row=1, column=1, padx=10, pady=10)
         
+        # Color Selection
+        color_label = tk.Label(
+            settings_frame,
+            text="ASCII Color:",
+            font=('Arial', 10),
+            bg='#1a1a1a',
+            fg='#888888'
+        )
+        color_label.grid(row=2, column=0, padx=10, pady=10)
+        
+        self.color_btn = tk.Button(
+            settings_frame,
+            text="Choose Color",
+            font=('Arial', 9),
+            bg='#00ff00',
+            fg='black',
+            command=self.choose_color,
+            cursor='hand2',
+            padx=10,
+            pady=5
+        )
+        self.color_btn.grid(row=2, column=1, padx=10, pady=10)
+        
         # Instructions
         instructions = tk.Label(
             self.root,
@@ -216,7 +240,8 @@ class ASCIIArtGUI:
             animator = ASCIIAnimator(
                 ascii_data, 
                 mode=self.animation_var.get(),
-                duration_seconds=self.duration_var.get()
+                duration_seconds=self.duration_var.get(),
+                color=self.current_color
             )
             
             # Update status
@@ -232,6 +257,25 @@ class ASCIIArtGUI:
             # Show error message
             self.status_label.config(text=f"Status: Error - {str(e)}")
             messagebox.showerror("Error", f"Failed to process image:\n{str(e)}")
+    
+    def choose_color(self):
+        """
+        Open color chooser dialog to select ASCII color
+        """
+        color = colorchooser.askcolor(
+            title="Choose ASCII Color",
+            initialcolor=self.current_color
+        )
+        
+        if color[0]:  # color[0] is RGB tuple, color[1] is hex
+            self.current_color = tuple(int(c) for c in color[0])
+            # Update button color to show selected color
+            hex_color = color[1]
+            self.color_btn.config(bg=hex_color)
+            # Change text color based on brightness for readability
+            brightness = sum(self.current_color) / 3
+            text_color = 'black' if brightness > 127 else 'white'
+            self.color_btn.config(fg=text_color)
 
 
 def main():

@@ -9,7 +9,7 @@ import numpy as np
 
 
 class ASCIIAnimator:
-    def __init__(self, ascii_data, mode='Matrix', duration_seconds=8):
+    def __init__(self, ascii_data, mode='Matrix', duration_seconds=8, color=(255, 255, 255)):
         self.ascii_chars = ascii_data['ascii_chars']
         self.distances = ascii_data['distances']
         self.angles = ascii_data['angles']
@@ -42,7 +42,7 @@ class ASCIIAnimator:
         
         self.bg_color = (0, 0, 0)
         # Revert to WHITE as requested
-        self.text_color = (255, 255, 255) 
+        self.text_color = color 
         
         unique_chars = set(char for row in self.ascii_chars for char in row)
         self.char_cache = {}

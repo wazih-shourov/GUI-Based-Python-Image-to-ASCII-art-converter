@@ -43,7 +43,7 @@ class ASCIIConverter:
             
             # High Contrast for Hacker Look
             enhancer = ImageEnhance.Contrast(image)
-            image = enhancer.enhance(1.8) # 80% more contrast for clear face in Matrix style
+            image = enhancer.enhance(1.8) 
             
             enhancer = ImageEnhance.Sharpness(image)
             image = enhancer.enhance(1.5)
