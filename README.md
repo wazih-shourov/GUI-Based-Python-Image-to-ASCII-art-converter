@@ -60,4 +60,4 @@ ASCII art/
 
 ---
 
-**Created with ❤️ for ASCII art lovers**
+**Created By Wazih for ASCII art lovers**
